@@ -1,0 +1,12 @@
+<resources>
+    <declare-styleable name="PlotView">
+        <attr name="axe_offset" format="float"/>
+        <attr name="divider_height" format="float"/>
+        <attr name="text_size" format="float"/>
+        <attr name="plot_size" format="float"/>
+
+        <attr name="axe_color" format="color"/>
+        <attr name="label_color" format="color"/>
+        <attr name="plot_color" format="color"/>
+    </declare-styleable>
+</resources>

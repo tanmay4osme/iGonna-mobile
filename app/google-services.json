@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "588843333071",
+    "firebase_url": "https://igonna-app.firebaseio.com",
+    "project_id": "igonna-app",
+    "storage_bucket": "igonna-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588843333071:android:e8a167d95fb27a78",
+        "android_client_info": {
+          "package_name": "com.iGonna.iGonna"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "588843333071-6anu9m15u8i8pqnq17u682b683nqq72c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuIHoTE8Unix91ySxQZrH-KLgrKJkdsVk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588843333071:android:dae71215b07d1f61",
+        "android_client_info": {
+          "package_name": "com.gonna"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "588843333071-8545ri8jp41vkj2e986018k9jvdoks1n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gonna",
+            "certificate_hash": "47db496f3c1c4a66862c5ec3945d7d6e5d2dc1bb"
+          }
+        },
+        {
+          "client_id": "588843333071-6anu9m15u8i8pqnq17u682b683nqq72c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuIHoTE8Unix91ySxQZrH-KLgrKJkdsVk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "588843333071-6anu9m15u8i8pqnq17u682b683nqq72c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

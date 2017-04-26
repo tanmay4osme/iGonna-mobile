@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">iGonna</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="login">Login</string>
+    <string name="map_not_ready">Map is not ready yet</string>
+    <string name="maxim">maxim_domoskanov@mail.ru</string>
+    <string name="password">13254do</string>
+    <string name="title_activity_custom_marker_clustering">Map</string>
+    <string name="title_activity_show_me">Map</string>
+    <string name="no_location_detected">No location detected</string>
+    <string name="title_activity_friends">Map</string>
+</resources>

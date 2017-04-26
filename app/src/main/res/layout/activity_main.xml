@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/red"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+    <TextView
+        android:id="@id/text_welcome"
+        android:layout_width="match_parent"
+        android:layout_height="36sp"
+        android:gravity="center"
+        android:text="We are going to go to"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="24sp"
+        android:textStyle="bold"/>
+
+    <android.support.v7.widget.ButtonBarLayout
+        android:id="@+id/btn_barLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_welcome"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_contacts"
+            android:layout_width="96sp"
+            android:layout_height="36sp"
+            android:layout_marginTop="6sp"
+            android:background="@color/blue"
+            android:text="contacts"
+            android:textStyle="italic"/>
+
+        <Button
+            android:id="@+id/btn_car"
+            android:layout_width="96sp"
+            android:layout_height="36sp"
+            android:layout_marginTop="6sp"
+            android:background="@color/blue"
+            android:text="car"
+            android:textStyle="italic"/>
+
+        <Button
+            android:id="@+id/btn_friends"
+            android:layout_width="96sp"
+            android:layout_height="36sp"
+            android:layout_marginTop="6sp"
+            android:background="@color/blue"
+            android:text="friends"
+            android:textStyle="italic"/>
+
+        <Button
+            android:id="@+id/btn_me"
+            android:layout_width="96sp"
+            android:layout_height="36sp"
+            android:layout_marginTop="6sp"
+            android:background="@color/blue"
+            android:text="me"
+            android:textStyle="italic"/>
+    </android.support.v7.widget.ButtonBarLayout>
+</RelativeLayout>
