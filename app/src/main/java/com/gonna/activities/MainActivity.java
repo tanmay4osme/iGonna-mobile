@@ -39,8 +39,8 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.Connec
         ShowMeActivity.start(this);
     }
 
-    @OnClick(R.id.btn_car) protected void onCarButtonClicked(){
-        MapsActivity.start();
+    @OnClick(R.id.btn_car) protected void onCarButtonClicked() {
+        MapsActivity.start(this);
     }
 
     @Override public void onConnected(@Nullable Bundle bundle) {

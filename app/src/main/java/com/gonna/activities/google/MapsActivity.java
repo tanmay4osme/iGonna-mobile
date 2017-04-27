@@ -15,6 +15,9 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+
+import com.gonna.R;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
