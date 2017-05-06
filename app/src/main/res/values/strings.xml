@@ -9,4 +9,11 @@
     <string name="title_activity_show_me">Map</string>
     <string name="no_location_detected">No location detected</string>
     <string name="title_activity_friends">Map</string>
+    <string name="title_activity_igonna">Map</string>
+    <string-array name="maps_array">
+        <item>me</item>
+        <item>car</item>
+        <item>friends</item>
+        <item>contacts</item>
+    </string-array>
 </resources>

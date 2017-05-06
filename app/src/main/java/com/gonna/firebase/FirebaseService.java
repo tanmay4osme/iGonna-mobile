@@ -1,5 +1,7 @@
 package com.gonna.firebase;
 
+import android.location.Location;
+
 import com.gonna.models.RegistrationModel;
 import com.gonna.models.User;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -72,6 +74,15 @@ public class FirebaseService {
                 callback.onFailure(databaseError.toException());
             }
         });
+    }
+
+    public static void setLocation(Location location, Callback<List<User>> callback) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth
+                .getInstance().getCurrentUser().getUid());
+        userRef.child("latitude").setValue(location.getLatitude());
+        userRef.child("longitude").setValue(location.getLongitude());
+
+        getAllUsers(callback);
     }
 
     public interface Callback<T> {

@@ -1,28 +1,27 @@
 package com.gonna.activities.google;
 
-import android.*;
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-
-import com.gonna.R;
-
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.gonna.activities.MainActivity;
+import com.gonna.R;
+import com.gonna.firebase.FirebaseService;
+import com.gonna.models.User;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -40,43 +39,49 @@ import com.google.maps.android.ui.IconGenerator;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
+
+import butterknife.Bind;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient
         .ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private static final String TAG = MapsActivity.class.getSimpleName();
-
-    private Location mCurrentLocation;
     private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
     private GoogleMap mMap;
+    private Location mCurrentLocation;
+    private LocationRequest mLocationRequest;
     private String mLastUpdateTime;
-    private static final long INTERVAL = 1000 * 60 * 1; //1 minute
-    private static final long FASTEST_INTERVAL = 1000 * 60 * 1; // 1 minute
-    private static final float SMALLEST_DISPLACEMENT = 0.15F; //quarter of a meter
-    private ProgressDialog pDialog;
-    private Button back;
+    @Bind(R.id.spinner) Spinner spinner;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        back = (Button) findViewById(R.id.back);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        back.setOnClickListener(v -> {
-            Intent i = new Intent(MapsActivity.this, MainActivity.class);
-            startActivity(i);
-            finish();
+        // Spinner
+        spinner = new Spinner(this);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.maps_array, android.R
+                .layout.simple_spinner_item);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
     }
 
     @Override public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        //Initialize Google Play Services
+        // initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                     PackageManager.PERMISSION_GRANTED) {
@@ -98,33 +103,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override public void onConnected(@Nullable Bundle bundle) {
-
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
-        mLocationRequest.setSmallestDisplacement(SMALLEST_DISPLACEMENT);
+        mLocationRequest.setSmallestDisplacement(0.15F); // quarter of 1m
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager
                 .PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
-
-
     }
 
     @Override public void onConnectionSuspended(int i) {
-
     }
 
     @Override public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 
     @Override public void onLocationChanged(Location location) {
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-        LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-        addMarker();
+
+        FirebaseService.setLocation(mCurrentLocation, new FirebaseService.Callback<List<User>>() {
+            @Override public void onSuccess(List<User> response) {
+                addMarkers(response);
+            }
+
+            @Override public void onFailure(Exception e) {
+
+            }
+        });
+
+        //        addMarker();
     }
 
     private void addMarker() {
@@ -146,6 +156,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    private void addMarkers(List<User> users) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        IconGenerator iconFactory = new IconGenerator(this);
+        iconFactory.setStyle(IconGenerator.STYLE_ORANGE);
+        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(mLastUpdateTime)));
+        markerOptions.anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV());
+
+        LatLng currentLatLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+
+        long atTime = mCurrentLocation.getTime();
+
+        for (User user : users) {
+            markerOptions.position(new LatLng(user.getLatitude(), user.getLongitude()));
+            mLastUpdateTime = DateFormat.getTimeInstance().format(new Date(atTime));
+            mMap.addMarker(markerOptions).setTitle(mLastUpdateTime);
+        }
+
+        Log.d(TAG, "Markers added.................................................");
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 17));
+        Log.d(TAG, "Zoom done.....................................................");
+    }
+
     @Override protected void onPause() {
         super.onPause();
         stopLocationUpdates();
@@ -156,16 +188,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Log.d(TAG, "Location update stopped .......................");
     }
 
-
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
                 .PERMISSION_GRANTED) {
-
             // Asking user if explanation is needed
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
@@ -173,8 +202,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //Prompt the user once explanation has been shown
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
-
-
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -196,15 +223,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // contacts-related task you need to do.
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
                             PackageManager.PERMISSION_GRANTED) {
-
                         if (mGoogleApiClient == null) {
                             buildGoogleApiClient();
                         }
                         mMap.setMyLocationEnabled(true);
                     }
-
                 } else {
-
                     // Permission denied, Disable the functionality that depends on this permission.
                     Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
                 }
@@ -214,7 +238,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // other 'case' lines to check for other permissions this app might request.
             // You can add here other case statements according to your requirement.
         }
-
     }
 
     public static void start(Context context) {

@@ -2,17 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/red"
+                android:background="@color/colorPrimaryDark"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
     <TextView
         android:id="@id/text_welcome"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="36sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorPrimaryDark"
         android:gravity="center"
-        android:text="We are going to go to"
-        android:textColor="@color/colorPrimaryDark"
+        android:text="Where're uGonna?"
+        android:textColor="@color/accent_10"
         android:textSize="24sp"
         android:textStyle="bold"/>
 
@@ -21,43 +24,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_welcome"
+        android:layout_centerHorizontal="true"
+        android:background="@color/PeachPuff"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/btn_map"
+            android:layout_width="128sp"
+            android:layout_height="36sp"
+            android:layout_marginTop="6sp"
+            android:background="@color/PeachPuff"
+            android:text="Map(where my friends are going)"
+            android:textStyle="italic"/>
+
+        <Button
             android:id="@+id/btn_contacts"
-            android:layout_width="96sp"
+            android:layout_width="128sp"
             android:layout_height="36sp"
             android:layout_marginTop="6sp"
-            android:background="@color/blue"
-            android:text="contacts"
-            android:textStyle="italic"/>
-
-        <Button
-            android:id="@+id/btn_car"
-            android:layout_width="96sp"
-            android:layout_height="36sp"
-            android:layout_marginTop="6sp"
-            android:background="@color/blue"
-            android:text="car"
-            android:textStyle="italic"/>
-
-        <Button
-            android:id="@+id/btn_friends"
-            android:layout_width="96sp"
-            android:layout_height="36sp"
-            android:layout_marginTop="6sp"
-            android:background="@color/blue"
-            android:text="friends"
-            android:textStyle="italic"/>
-
-        <Button
-            android:id="@+id/btn_me"
-            android:layout_width="96sp"
-            android:layout_height="36sp"
-            android:layout_marginTop="6sp"
-            android:background="@color/blue"
-            android:text="me"
+            android:background="@color/PeachPuff"
+            android:text="I gonna(where i'm going)"
+            android:layout_marginBottom="6sp"
             android:textStyle="italic"/>
     </android.support.v7.widget.ButtonBarLayout>
 </RelativeLayout>
