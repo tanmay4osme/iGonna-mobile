@@ -115,6 +115,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override public void onConnectionSuspended(int i) {
+        Location location = new Location("");
+        location.setLatitude(0.0d);
+        location.setLongitude(0.0d);
+        FirebaseService.setLocation(location, new FirebaseService.Callback<List<User>>() {
+            @Override public void onSuccess(List<User> response) {
+                addMarkers(response);
+            }
+
+            @Override public void onFailure(Exception e) {
+
+            }
+        });
     }
 
     @Override public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -133,8 +145,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
-
-        //        addMarker();
+        // addMarker();
     }
 
     private void addMarker() {
@@ -167,14 +178,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         long atTime = mCurrentLocation.getTime();
 
+        mMap.clear();
         for (User user : users) {
-            markerOptions.position(new LatLng(user.getLatitude(), user.getLongitude()));
-            mLastUpdateTime = DateFormat.getTimeInstance().format(new Date(atTime));
-            mMap.addMarker(markerOptions).setTitle(mLastUpdateTime);
+            LatLng latLng = new LatLng(user.getLatitude(), user.getLongitude());
+            if (latLng.latitude >= 1.0d) {
+                markerOptions.position(latLng);
+                mLastUpdateTime = DateFormat.getTimeInstance().format(new Date(atTime));
+                Marker marker = mMap.addMarker(markerOptions);
+                marker.setTitle(mLastUpdateTime);
+            }
         }
 
         Log.d(TAG, "Markers added.................................................");
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 17));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 13));
         Log.d(TAG, "Zoom done.....................................................");
     }
 
